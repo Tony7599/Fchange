@@ -5,4 +5,5 @@ echo "🔧 下载 Fchange..."
 pkg install wget -y && \
 wget -q https://raw.githubusercontent.com/tony7599/Fchange/main/main1 -O main1 && \
 chmod +x main1
-echo "使用sh main1运行"
+adb connect 0.0.0.0
+adb shell sh main1
