@@ -1,0 +1,36 @@
+#!/system/bin/sh
+echo "开始调用超快充"
+TARGET_LEVEL=100
+TOTAL_DURATION=10
+echo "正在激活超快充协议 (PD 3.0 100W)..."
+dumpsys battery set status 2
+dumpsys battery set ac 1
+dumpsys battery set usb 0 
+CURRENT_LEVEL=$(dumpsys battery | grep 'level: ' | awk '{print $2}')
+echo "当前电量: $CURRENT_LEVEL%"
+echo "预计剩余时间: ${TOTAL_DURATION}秒"
+echo "--------------------------------"
+
+# 3. 检查当前电量
+if [ "$CURRENT_LEVEL" -ge "$TARGET_LEVEL" ]; then
+    echo "电量已满，无需充电。"
+    dumpsys battery set level $TARGET_LEVEL
+    exit 0
+fi
+LEVEL_INCREASE=$((TARGET_LEVEL - CURRENT_LEVEL))
+INTERVAL=$(echo "$TOTAL_DURATION $LEVEL_INCREASE" | awk '{printf "%.3f", $1 / $2}')
+echo "开始超快充电..."
+echo "--------------------------------"
+i=$CURRENT_LEVEL
+while [ $i -le $TARGET_LEVEL ]
+do
+    dumpsys battery set level $i
+    echo "已充电: $i% (还需等待 ${INTERVAL}秒)"
+    sleep $INTERVAL
+    i=$((i + 1))
+done
+dumpsys battery set level $TARGET_LEVEL
+echo "--------------------------------"
+echo "超快充完成！当前电量: ${TARGET_LEVEL}%"
+echo "滚吧你"
+exit 6
