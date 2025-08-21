@@ -1,4 +1,4 @@
-#!/data/data/com.termux/files/usr/bin/bash
+
 cd ~ 
 # 简洁版安装脚本
 echo "🔧 下载 Fchange..."
