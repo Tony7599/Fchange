@@ -1,4 +1,5 @@
 #!/system/bin/sh
+echo "本软件需要shell权限运行否则无法运行"
 echo "开始调用超快充"
 TARGET_LEVEL=100
 TOTAL_DURATION=10
